@@ -1,0 +1,14 @@
+{
+  "name": "the-good-years",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "A friendship photo archive, organized by year and ready for GitHub Pages.",
+  "scripts": {
+    "start": "node scripts/serve.mjs",
+    "check": "node --experimental-vm-modules scripts/check.mjs"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}
