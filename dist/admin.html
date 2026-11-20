@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex,nofollow">
+  <meta name="referrer" content="no-referrer">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; connect-src 'self' https://api.github.com; img-src 'self' data: blob: https://tkjewelrytop-lab.github.io https://raw.githubusercontent.com; object-src 'none'; base-uri 'none'; form-action 'none'">
+  <title>LSKC — Manage memories</title>
+  <link rel="icon" href="./assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="./admin.css">
+  <script type="module" src="./admin.js"></script>
+</head>
+<body>
+  <header class="wrap"><a class="brand" href="./">LSKC<span>.</span></a><span class="admin-label">MEMORY KEEPER</span><a class="view-link" href="./">View timeline</a></header>
+  <main class="wrap">
+    <div class="page-intro"><h1>A place for <em>every memory.</em></h1><p>Add photos here. The public timeline stays just for the memories.</p></div>
+    <section class="panel connection-panel" aria-labelledby="connection-title">
+      <div class="panel-heading"><div><h2 id="connection-title">Connect to our album</h2><p id="connection-description">Photos are saved in the LSKC GitHub repository.</p></div><span id="connection-state" class="badge">Not connected</span></div>
+      <form id="connect-form"><label for="github-token">GitHub access token</label><div class="connect-row"><input id="github-token" type="password" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="Fine-grained token for this repository" required><button class="button" id="connect-button" type="submit">Connect</button></div><p class="help">Your token is kept only while this page is open. It is never saved in the website or browser storage.</p></form>
+      <div class="connected-row" id="connected-row" hidden><p id="connected-user"></p><button class="text-button" id="disconnect-button">Disconnect</button></div>
+      <details id="token-help"><summary>First time? Set up your upload access</summary><ol><li>Open <a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener noreferrer">GitHub’s fine-grained token settings</a> in your own account.</li><li>Choose resource owner <strong>tkjewelrytop-lab</strong> and select only <strong>friendshipLSKC-forever</strong>.</li><li>Under repository permissions, set <strong>Contents → Read and write</strong>. Choose an expiry date.</li><li>Create the token, copy it, and paste it above. You don’t need to send it to anyone.</li></ol></details>
+      <p id="connect-error" class="error" role="alert"></p>
+    </section>
+
+    <section class="panel" aria-labelledby="upload-title">
+      <div class="panel-heading"><div><h2 id="upload-title">Add to our years</h2><p>Choose the same-pose photo as your cover, then add as many moments as you like.</p></div></div>
+      <p class="connection-hint" id="connection-hint">Connect above to publish photos.</p>
+      <form id="upload-form"><fieldset id="upload-fields" disabled>
+        <label for="memory-target">Where do these photos belong?</label><select id="memory-target"><option value="new">A new gathering</option></select>
+        <div id="memory-details"><div class="form-row"><label>Date<input name="date" type="date" min="2013-01-01" required></label><label>Place <span class="optional">(optional)</span><input name="location" maxlength="100" placeholder="Where we got together"></label></div><label>A name for this memory<input name="title" maxlength="90" placeholder="Our annual gathering" required></label><label>A few words <span class="optional">(optional)</span><textarea name="description" maxlength="1500" rows="3" placeholder="Something we’ll want to remember…"></textarea></label></div>
+        <label id="dropzone" class="dropzone" for="photo-files"><input id="photo-files" type="file" accept="image/jpeg,image/png,image/webp" multiple><svg viewBox="0 0 40 40" aria-hidden="true"><rect x="5" y="7" width="30" height="26" rx="3"/><circle cx="13" cy="15" r="3"/><path d="m6 29 10-10 8 8 5-5 6 6"/></svg><strong>Choose or drop photos</strong><span>Up to 20 at a time · JPG, PNG, WebP · 20 MB each</span></label>
+        <div class="selection-heading" id="selection-heading" hidden><p id="selection-count"></p><button id="clear-photos" class="text-button" type="button">Clear selection</button></div>
+        <div id="photo-previews" class="photo-previews"></div>
+        <p id="upload-error" class="error" role="alert"></p>
+        <div class="publish-row"><p>Publishing saves the photos to the public repository and updates the timeline after GitHub Pages finishes.</p><button class="button" id="publish-memory" type="submit">Publish memory</button></div>
+      </fieldset></form>
+      <div id="publish-progress" class="publish-progress" role="status" hidden><span class="working-indicator" aria-hidden="true"></span><p id="progress-message"></p></div>
+      <div id="publish-success" class="publish-success" role="status" hidden><h3>Another memory, kept.</h3><p>Your photos are saved in GitHub. They’ll appear on the timeline when the website update finishes.</p><a id="published-commit" href="https://github.com/tkjewelrytop-lab/friendshipLSKC-forever/commits/main" target="_blank" rel="noopener noreferrer">View saved update</a><a href="./" target="_blank" rel="noopener">Open timeline</a></div>
+    </section>
+
+    <section class="panel" id="published-panel" aria-labelledby="published-title" hidden><div class="panel-heading"><div><h2 id="published-title">Already in the album</h2><p id="published-count"></p></div><button id="refresh-memories" class="text-button">Refresh</button></div><div id="published-memories"></div></section>
+  </main>
+  <footer class="wrap"><p>LSKC · Our years together.</p><a href="./">Back to the memories</a></footer>
+</body>
+</html>

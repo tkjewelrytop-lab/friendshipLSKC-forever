@@ -1,36 +1,47 @@
 # LSKC.
 
-Our years together. A simple personal photo journal for the same friends and the same pose, every year since 2013.
+A personal photo timeline: the same friends, the same pose, every year since 2013. Each year can contain several gatherings and as many published photos as you add over time.
 
-Browse the years from 2013 through 2026 and add the real photos from each gathering. Years without photos stay empty, ready for their memories. There are no stock albums or invented gatherings.
+- [Public album](https://tkjewelrytop-lab.github.io/friendshipLSKC-forever/) — a timeline for viewing memories, with no upload controls.
+- [Owner upload page](https://tkjewelrytop-lab.github.io/friendshipLSKC-forever/admin.html) — add photos directly to the GitHub repository.
+- [Repository](https://github.com/tkjewelrytop-lab/friendshipLSKC-forever)
+
+## Set up owner access
+
+Create a fine-grained personal access token yourself using the GitHub account that owns this repository, or an authorized organization member account:
+
+1. On GitHub, open **Settings → Developer settings → Personal access tokens → Fine-grained tokens → Generate new token**. [Open the token creation page](https://github.com/settings/personal-access-tokens/new).
+2. Give it a name and expiration, then set **Resource owner** to `tkjewelrytop-lab`.
+3. Under **Repository access**, choose **Only select repositories**, then select `friendshipLSKC-forever`.
+4. Under **Permissions → Repository permissions**, set **Contents** to **Read and write**, then choose **Generate token**. Organization approval may be required before a token can write.
+
+These steps follow [GitHub's token setup instructions](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens#creating-a-fine-grained-personal-access-token). The upload page changes only photos and album data, so the token needs no Actions or Workflows permission. GitHub documents the required [Contents permission for Git database operations](https://docs.github.com/en/rest/git/trees#create-a-tree).
+
+Paste the token into the owner upload page, never into chat or a repository file. The page holds it in memory only; it does not save it in browser storage. Reloading or disconnecting clears access from the page.
 
 ## Add photos
 
-1. Choose **Add photos**, then enter the gathering's date and details.
-2. Select that year's same-pose group photo first, followed by other photos from the day. The first photo is the year's signature photo, so choose the upload order accordingly.
-3. Choose **Save memory**. Repeat for each year you want to add.
+Open the owner upload page and choose **Connect** after entering your token. Enter the gathering's date and details, choose your photos, then choose **Publish memory**. Select the same-pose group photo first to make it the gathering's signature photo. You can add more than one gathering in a year; the public album groups them under that year.
 
-Saved memories are local drafts in this browser on this device. They become visible to everyone after you export the updated website and publish its files. Export regularly to keep a copy outside browser storage.
+Each upload accepts up to **20 photos**, up to **20 MB each**. Photos are resized to a maximum of **2,000 pixels on the longest edge** and compressed as JPEG at quality **0.88** before being sent to GitHub. Choose **Add more photos** beside an existing memory to add another batch to that gathering.
 
-## Export and publish
+A successful upload commits the photos and album data to `main`. The existing GitHub Pages workflow then publishes the update; allow time for the deployment to finish and refresh the public album. There is no fixed publication time. Photos and captions are public in this repository and on the album.
 
-1. Choose **Export site**, then **Download website & photos**.
-2. Extract the ZIP. It includes the website, photos, and `dist/memories.json` with your saved memories.
-3. Commit the exported files to [the GitHub repository](https://github.com/tkjewelrytop-lab/friendshipLSKC-forever), keeping the `dist/` and `.github/` folders in the repository root.
-4. In **Settings → Pages**, choose **GitHub Actions** as the publishing source. Once configured, the included workflow publishes updates pushed to `main`.
+## Album files
 
-The published address appears in the repository's Pages settings after deployment. Saving a local memory or downloading the ZIP does not publish it automatically.
+- `dist/memories.json` is an array of gatherings. It starts as `[]` while the album has no real uploads.
+- Each gathering has `id`, `title`, `date` (`YYYY-MM-DD`), `location`, `description`, and a `photos` array.
+- Each photo has a relative `src`, such as `./photos/gathering-id/001.jpg`, and a `caption`.
+- The first photo is the signature photo. Multiple photos and multiple gatherings per year are supported.
 
-To update photos directly, place them in `dist/photos/` and edit `dist/memories.json`. Use relative paths such as `photos/lskc-2026.jpg`, and keep each gathering's signature photo first in its `photos` array.
-
-The deployment workflow follows [GitHub's official Pages guidance](https://docs.github.com/en/pages/getting-started-with-github-pages/using-custom-workflows-with-github-pages).
+The admin page uses GitHub's REST API as the storage backend. No separate upload server is required. Actual authenticated uploads need the owner's token; the source checks do not verify a real owner upload.
 
 ## Preview locally
 
-The site uses plain HTML, CSS, and JavaScript, with no dependencies or build step. With Node.js 20 or later installed, run:
+The site uses plain HTML, CSS, and JavaScript with no dependencies or build step. With Node.js 20 or later:
 
 ```sh
 npm start
 ```
 
-Open [the local preview](http://localhost:4173). Run `npm run check` to check JavaScript syntax, local file references, and basic page metadata.
+Open [the public preview](http://localhost:4173/) or [the admin preview](http://localhost:4173/admin.html). Run `npm run check` to check both pages, JavaScript modules, relative file references, and the album data format.
